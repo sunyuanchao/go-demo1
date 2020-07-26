@@ -21,5 +21,9 @@ https://teakki.com/p/5aae5e2f1a37996365f0badd
 https://blog.csdn.net/weixin_37591536/article/details/88411129
 
 
+```
 
+#### 项目启动编辑
+```
+go run main.go routes.go
 ```
