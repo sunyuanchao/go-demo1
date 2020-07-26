@@ -6,6 +6,7 @@ Orm : http://gorm.io/docs/
 Gin : https://github.com/gin-gonic/gin
 Mysql : github.com/go-sql-driver/mysql
 Sqlite: github.com/jinzhu/gorm/dialects/sqlite
+crypt : golang.org/x/crypto/bcrypt
 
 
 ### 项目

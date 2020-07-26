@@ -6,10 +6,14 @@ import (
 	"github.com/sunyd/go-demo1/common"
 	"github.com/sunyd/go-demo1/model"
 	"github.com/sunyd/go-demo1/util"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 )
 
+/**
+用户注册.
+*/
 func Register(ctx *gin.Context) {
 	db := common.GetDB()
 	//获取请求参数
@@ -38,10 +42,17 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
+	//加密用户密码
+	hasedPasswd, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "密码加密失败"})
+		return
+	}
+
 	//验证通过，新增该用户
 	newUser := model.User{
 		Username:  username,
-		Password:  password,
+		Password:  string(hasedPasswd),
 		Telephone: telephone,
 	}
 
@@ -52,6 +63,46 @@ func Register(ctx *gin.Context) {
 		"code": 200,
 		"msg":  "注册成功",
 	})
+}
+
+func Login(ctx *gin.Context) {
+
+	db := common.GetDB()
+
+	//获取参数
+	telephone := ctx.PostForm("telephone")
+	password := ctx.PostForm("password")
+
+	//验证参数
+	if len(telephone) != 11 {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 402, "msg": "手机号不足11位"})
+		return
+	}
+	if len(password) < 6 {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 402, "msg": "密码长度不足6位"})
+		return
+	}
+
+	//数据库查询出用户
+	var user model.User
+	db.Where("telephone =?", telephone).First(&user)
+	if user.ID == 0 {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "用户不存在"})
+		return
+	}
+
+	//判断用户密码是否正确
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "密码不正确"})
+		return
+	}
+
+	//用户登录成功，返回token
+	token := "111"
+
+	//返回结果
+	ctx.JSON(http.StatusOK, gin.H{"code": 200, "msg": "登录成功", "data": gin.H{"token": token}})
+
 }
 
 /**
