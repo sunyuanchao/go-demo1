@@ -7,6 +7,7 @@ Gin : https://github.com/gin-gonic/gin
 Mysql : github.com/go-sql-driver/mysql
 Sqlite: github.com/jinzhu/gorm/dialects/sqlite
 crypt : golang.org/x/crypto/bcrypt
+jwt   : github.com/dgrijalva/jwt-go
 
 
 ### 项目
@@ -16,6 +17,8 @@ https://github.com/haydenzhourepo/gin-vue-gin-essential-vue
 ### 参考：
 https://geektutu.com/post/quick-go-gin.html
 https://teakki.com/p/5aae5e2f1a37996365f0badd
+
+https://blog.csdn.net/qfzhangxu/article/details/107314179
 
 
 ### github 操作
