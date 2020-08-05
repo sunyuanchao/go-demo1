@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"github.com/spf13/viper"
 	"github.com/sunyd/go-demo1/model"
 )
 
@@ -12,13 +13,13 @@ var DB *gorm.DB
 数据库初始化.
 */
 func InitSqlDb() *gorm.DB {
-	driveName := "mysql"
-	host := "localhost"
-	port := 3306
-	database := "test"
-	username := "root"
-	password := "root"
-	charset := "utf8"
+	driveName := viper.GetString("datasource.driverName")
+	host := viper.GetString("datasource.host")
+	port := viper.GetInt("datasource.port")
+	database := viper.GetString("datasource.database")
+	username := viper.GetString("datasource.username")
+	password := viper.GetString("datasource.password")
+	charset := viper.GetString("datasource.charset")
 
 	args := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=true",
 		username,
